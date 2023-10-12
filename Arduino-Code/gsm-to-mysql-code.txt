@@ -1,0 +1,118 @@
+
+#include <LiquidCrystal_I2C.h>
+#include <Wire.h>
+
+LiquidCrystal_I2C lcd(0x27,16,2);
+
+SoftwareSerial SIM900(3, 4); // RX, TX pins of Arduino connected to GSM module
+
+String incomingNumber = ""; // variable to store incoming phone number
+String incomingSMS = ""; // variable to store incoming SMS message
+
+void setup() {
+
+lcd.init();
+lcd.backlight();
+  Serial.begin(9600); // initialize serial communication for debugging
+  SIM900.begin(9600); // initialize GSM module
+
+  // Initialize GSM module
+  SIM900.println("AT"); // Send AT command to check if GSM module is responsive
+  delay(1000);
+  if (SIM900.find("OK")) {
+   
+      lcd.setCursor(0,0);
+      lcd.print("GSM is ready.");
+    Serial.println("GSM is ready.");
+  } else {
+   lcd.setCursor(0,0);
+      lcd.print("SIM FAILED");
+    Serial.println("Unable to communicate with GSM module. Check connections.");
+    while (1);
+  }
+
+  lcd.setCursor(0,0);
+  lcd.print("GSM is ready.");
+  delay(1000);
+  lcd.clear();
+
+
+
+void loop() {
+  if (SIM900.available()) {
+    char c = SIM900.read();
+    
+
+    Serial.write(c); // display GSM module responses on serial monitor
+    if (c == '\n') {
+      // Check if the received line contains the incoming phone number
+     /* if (incomingNumber.startsWith("9")) {
+        // process the phone number
+        // You can save the number to a variable or perform any desired action here
+        Serial.print("Incoming Number: ");
+        Serial.println(incomingNumber);
+      }
+      // Check if the received line contains the incoming SMS message
+      else*/ 
+  
+        
+//************************************************************************************************************************************************
+  String firstTwoWords = separateWords(incomingSMS);  // Separate first two words
+  // Store the separated words in two variables
+  String mId = "";
+  String reading = "";
+
+  int spaceIndex = firstTwoWords.indexOf(' ');  // Find the index of the first space
+
+  if (spaceIndex != -1) {
+    mId = firstTwoWords.substring(0, spaceIndex);  // Store the first word
+
+    int secondSpaceIndex = firstTwoWords.indexOf(' ', spaceIndex + 1);  // Find the index of the second space
+
+    if (secondSpaceIndex != -1) {
+      reading = firstTwoWords.substring(spaceIndex + 1, secondSpaceIndex);  // Store the second word
+    } else {
+      reading = firstTwoWords.substring(spaceIndex + 1);  // Store the remaining text as the second word
+    }
+  }
+
+  // Print the separated words
+    
+      if(mId != "+CMT")
+      {
+        Serial.print("{\"Mid\":");
+        Serial.print(mId);
+        Serial.print(",\"Read\":");
+        Serial.print(reading);
+        Serial.println("}");
+      }
+        delay(500);
+        
+        incomingSMS = ""; // clear the SMS message variable for the next message
+      }
+    }
+    else {
+      // Append characters to the appropriate variables
+      if (c == '"') {
+        // the line contains the incoming phone number
+        incomingNumber = "";
+      }
+      else if (c == '\r') {
+        // ignore carriage return characters
+      }
+      else {
+        // append the character to the appropriate variable
+        if (incomingNumber.length() > 0) {
+          incomingNumber += c;
+        }
+        else {
+          incomingSMS += c;
+        }
+      }
+    }
+  }
+  
+}
+
+
+
