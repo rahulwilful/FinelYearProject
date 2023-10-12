@@ -10,52 +10,53 @@ require_once 'PHPMailer/src/SMTP.php';
 ?>
 
 <html>
+
 <head>
-    <title>bill board</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bill board</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <style>
-    .tName {
-        background-color: lightblue;
-    }
+.tName {
+  background-color: lightblue;
+}
 
-    .table {
-        text-align: center;
-        font-size: 14px;
-    }
+.table {
+  text-align: center;
+  font-size: 14px;
+}
 
-    .details {
-        font-size: 8px;
-    }
+.details {
+  font-size: 8px;
+}
 </style>
 
 <body>
-    <h1 style="text-align:center">Bill board</h1>
-    <form>
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="display" style="text-align:center">Sending Bill To All</h3>
-                            <div>
-                                <div class="cardbody">
-                                    <table class="table">
-                                        <thead>
-                                            <tr class="tName">
-                                                <td>Name</td>
-                                                <td>ID</td>
-                                                <td>E-mail</td>
-                                                <td>Address</td>
-                                                <td>Usage</td>
-                                                <td>Send Bill</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
+  <h1 style="text-align:center">Bill board</h1>
+  <form>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="display" style="text-align:center">Sending Bill To All</h3>
+              <div>
+                <div class="cardbody">
+                  <table class="table">
+                    <thead>
+                      <tr class="tName">
+                        <td>Name</td>
+                        <td>ID</td>
+                        <td>E-mail</td>
+                        <td>Address</td>
+                        <td>Usage</td>
+                        <td>Send Bill</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
                                             $sql = "SELECT * FROM customers WHERE c_reading != 0";
                                             $result = mysqli_query($con, $sql);
                                             if (!$result) {
@@ -92,7 +93,7 @@ require_once 'PHPMailer/src/SMTP.php';
                                                     $mail->Host = 'smtp.gmail.com';
                                                     $mail->SMTPAuth = true;
                                                     $mail->Username = 'project2sms2billing@gmail.com';
-                                                    $mail->Password = 'pabnainwzyzzttfo';
+                                                    $mail->Password = 'yorPassword';
                                                     $mail->SMTPSecure = 'tls';
                                                     $mail->Port = '587';
                                                     $mail->setFrom('project2sms2billing@gmail.com');
@@ -138,15 +139,16 @@ require_once 'PHPMailer/src/SMTP.php';
                                             // Close the database connection
                                             mysqli_close($con);
                                             ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </tbody>
+                  </table>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-    </form>
+      </div>
+    </div>
+  </form>
 </body>
+
 </html>
